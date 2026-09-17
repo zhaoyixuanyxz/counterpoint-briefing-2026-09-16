@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>首周选题会 · Counterpoint</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,700&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #1c2834;
+      --muted: #5a6673;
+      --line: rgba(28, 40, 52, 0.12);
+      --accent: #2a5d78;
+      --accent-soft: #e4eef3;
+      --go: #1d6a4a;
+      --go-bg: #e5f3eb;
+      --hold: #8a5a2b;
+      --hold-bg: #f5eee4;
+      --warm: #f6f1e8;
+      --cool: #e7eef4;
+      --paper: rgba(255, 252, 247, 0.62);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      background: #cfd7e0;
+      color: var(--ink);
+      font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+      overflow: hidden;
+    }
+    .stage {
+      width: min(100vw, calc(100vh * 16 / 9));
+      height: min(100vh, calc(100vw * 9 / 16));
+      margin: 0 auto;
+      position: relative;
+      background:
+        radial-gradient(1100px 520px at 0% -8%, #fff7ec 0%, transparent 52%),
+        radial-gradient(900px 480px at 100% 0%, #dce8f2 0%, transparent 48%),
+        radial-gradient(700px 420px at 80% 110%, #efe4d6 0%, transparent 44%),
+        linear-gradient(168deg, var(--warm) 0%, var(--cool) 100%);
+      box-shadow: 0 18px 50px rgba(28, 40, 52, 0.12);
+      overflow: hidden;
+    }
+    .stage::after { display: none; }
+    .slide {
+      display: none;
+      position: absolute;
+      inset: 0;
+      padding: clamp(26px, 4.2vw, 56px) clamp(32px, 5vw, 72px) clamp(48px, 6.4vw, 76px);
+      flex-direction: column;
+      z-index: 1;
+    }
+    .slide.on { display: flex; }
+    .slide.cover.on { justify-content: flex-end; padding-bottom: clamp(56px, 8vw, 88px); }
+    .slide.topic {
+      padding: 0;
+      display: none;
+      grid-template-columns: minmax(168px, 21%) 1fr;
+    }
+    .slide.topic.on { display: grid; }
+    .brand {
+      position: absolute;
+      top: clamp(12px, 1.6vw, 20px);
+      left: clamp(32px, 5vw, 72px);
+      right: clamp(32px, 5vw, 72px);
+      z-index: 3;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      pointer-events: none;
+      font-size: clamp(10px, 0.95vw, 12px);
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      font-weight: 650;
+      color: var(--accent);
+    }
+    .brand .en {
+      font-family: Newsreader, "Noto Serif SC", serif;
+      font-size: 1.08em;
+      letter-spacing: 0.32em;
+    }
+    .brand.is-hidden { opacity: 0; }
+    .kicker {
+      font-size: clamp(11px, 1.1vw, 14px);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 650;
+      margin-bottom: clamp(6px, 0.9vw, 12px);
+    }
+    h1 {
+      font-family: "Noto Serif SC", Newsreader, serif;
+      font-weight: 650;
+      font-size: clamp(32px, 4.1vw, 62px);
+      line-height: 1.18;
+      letter-spacing: 0.01em;
+      max-width: 11.2em;
+    }
+    h2 {
+      font-family: "Noto Serif SC", serif;
+      font-weight: 650;
+      font-size: clamp(22px, 2.4vw, 36px);
+      line-height: 1.28;
+      margin-bottom: clamp(14px, 1.8vw, 24px);
+    }
+    .lead {
+      margin-top: clamp(10px, 1.2vw, 16px);
+      font-size: clamp(15px, 1.45vw, 20px);
+      color: var(--muted);
+      max-width: 32em;
+      line-height: 1.55;
+    }
+    .foot {
+      margin-top: auto;
+      padding-top: 0.8em;
+      font-size: clamp(12px, 1.1vw, 15px);
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+    .mast {
+      display: flex;
+      align-items: baseline;
+      gap: 0.85em;
+      font-size: clamp(11px, 1.05vw, 13px);
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      font-weight: 650;
+      color: var(--accent);
+    }
+    .mast .en {
+      font-family: Newsreader, serif;
+      font-size: 1.15em;
+      letter-spacing: 0.34em;
+    }
+    .mast .cn { font-family: "Noto Serif SC", serif; letter-spacing: 0.42em; }
+    .stamp {
+      margin-left: auto;
+      letter-spacing: 0.18em;
+      padding: 0.28em 0.7em;
+      border: 1px solid rgba(42, 93, 120, 0.35);
+      color: var(--accent);
+    }
+    .cover-rule {
+      width: min(38%, 260px);
+      height: 1.5px;
+      background: var(--accent);
+      opacity: 0.4;
+      margin: clamp(18px, 2.4vw, 28px) 0 clamp(16px, 2vw, 24px);
+    }
+    .cover-agenda {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35em 1.8em;
+      font-size: clamp(13px, 1.2vw, 16px);
+      color: var(--muted);
+    }
+    .cover-agenda i {
+      font-style: normal;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--accent);
+      margin-right: 0.4em;
+    }
+    .cover-date {
+      margin-top: clamp(22px, 3vw, 36px);
+      font-size: clamp(13px, 1.2vw, 16px);
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+    .slide.cover.on { justify-content: space-between; }
+    .slide:not(.cover):not(.topic) { padding-top: clamp(44px, 5.8vw, 70px); }
+    .toc {
+      list-style: none;
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: 1fr 1fr 1fr;
+    }
+    .toc li {
+      display: grid;
+      grid-template-columns: 3.4em 1fr auto;
+      gap: 0.9em;
+      align-items: center;
+      border-top: 1px solid var(--line);
+      font-size: clamp(22px, 2.5vw, 38px);
+      font-family: "Noto Serif SC", serif;
+      padding: 0 0.1em;
+    }
+    .toc li:last-child { border-bottom: 1px solid var(--line); }
+    .toc .n {
+      font-family: Newsreader, "Noto Serif SC", serif;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+      font-weight: 650;
+    }
+    .toc .hint {
+      font-family: "Noto Sans SC", sans-serif;
+      font-size: clamp(12px, 1.1vw, 15px);
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+    .tiles {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: clamp(10px, 1.2vw, 16px);
+    }
+    .tile {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--accent);
+      padding: clamp(16px, 1.9vw, 24px) clamp(18px, 2.1vw, 26px);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .bands {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: repeat(4, 1fr);
+    }
+    .bands.three { grid-template-rows: repeat(3, 1fr); }
+    .bands.stock {
+      flex: 1;
+      min-height: 0;
+      grid-template-rows: repeat(4, 1fr);
+    }
+    .bands.stock .band {
+      font-size: clamp(15px, 1.45vw, 20px);
+      align-items: start;
+      padding-top: 0.55em;
+      padding-bottom: 0.55em;
+    }
+    .bands.stock .band .lab { padding-top: 0.15em; }
+    .stock-domains {
+      margin-top: clamp(10px, 1.2vw, 16px);
+      flex-shrink: 0;
+    }
+    .list.bands { gap: 0; }
+    .band {
+      display: grid;
+      grid-template-columns: 7.2em 1fr;
+      gap: 1em;
+      align-items: center;
+      border-top: 1px solid var(--line);
+      font-size: clamp(17px, 1.7vw, 24px);
+      line-height: 1.45;
+      padding: 0 0.15em;
+    }
+    .band:last-child { border-bottom: 1px solid var(--line); }
+    .band .lab {
+      font-size: clamp(12px, 1.1vw, 14px);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .tile .lab {
+      font-size: clamp(11px, 1.05vw, 13px);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 0.45em;
+    }
+    .tile p {
+      font-size: clamp(16px, 1.55vw, 22px);
+      line-height: 1.5;
+    }
+    .st {
+      display: inline-block;
+      margin-bottom: 0.5em;
+      font-size: clamp(10px, 0.95vw, 12px);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 0.18em 0.55em;
+      align-self: flex-start;
+    }
+    .st.done { background: var(--go-bg); color: var(--go); }
+    .st.doing { background: var(--accent-soft); color: var(--accent); }
+    .st.wait { background: var(--hold-bg); color: var(--hold); }
+    .st.now { background: #1c2834; color: #f6f1e8; }
+    .band .st { margin-bottom: 0; align-self: center; justify-self: start; }
+    .criteria {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(12px, 1.4vw, 18px);
+      margin-bottom: clamp(12px, 1.4vw, 18px);
+    }
+    .criteria .tile { min-height: 0; }
+    .heat-row {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: clamp(8px, 1vw, 12px);
+    }
+    .heat-chip {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: clamp(16px, 1.8vw, 22px) clamp(12px, 1.4vw, 18px);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .heat-chip.go { border-top: 3px solid var(--go); }
+    .heat-chip.mid { border-top: 3px solid var(--accent); }
+    .heat-chip.hold { border-top: 3px solid var(--hold); }
+    .heat-chip .n {
+      font-family: Newsreader, "Noto Serif SC", serif;
+      font-size: clamp(28px, 3.1vw, 46px);
+      font-variant-numeric: tabular-nums;
+      font-weight: 650;
+      line-height: 1;
+      margin-bottom: 0.28em;
+    }
+    .heat-chip.go .n { color: var(--go); }
+    .heat-chip.mid .n { color: var(--accent); }
+    .heat-chip.hold .n { color: var(--hold); }
+    .heat-chip .unit {
+      font-size: clamp(11px, 1.02vw, 13px);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      margin: -0.2em 0 0.55em;
+    }
+    .heat-chip .t {
+      font-size: clamp(12px, 1.1vw, 14px);
+      color: var(--muted);
+      line-height: 1.35;
+    }
+    .heat-chip .foot-tag {
+      margin-top: auto;
+      font-size: clamp(13px, 1.2vw, 16px);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+    .heat-chip.go .foot-tag { color: var(--go); }
+    .heat-chip.mid .foot-tag { color: var(--accent); }
+    .heat-chip.hold .foot-tag { color: var(--hold); }
+    .overview {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto repeat(5, 1fr);
+    }
+    .overview.scan { grid-template-rows: auto repeat(4, 1fr); }
+    .orow {
+      display: grid;
+      grid-template-columns: 2.2em 1fr auto auto;
+      gap: 0.85em;
+      align-items: center;
+      border-top: 1px solid var(--line);
+      padding: 0 0.15em;
+      font-size: clamp(15px, 1.45vw, 20px);
+    }
+    .orow.head {
+      font-size: clamp(11px, 1.05vw, 13px);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+      border-top: none;
+      padding-bottom: 0.35em;
+    }
+    .orow:last-child { border-bottom: 1px solid var(--line); }
+    .orow .ix {
+      font-family: Newsreader, serif;
+      font-variant-numeric: tabular-nums;
+      color: var(--accent);
+      font-weight: 650;
+      font-size: 1.15em;
+    }
+    .orow .heat {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      min-width: 6.8em;
+      line-height: 1.2;
+      text-align: right;
+    }
+    .orow .heat b {
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      color: var(--accent);
+      font-style: normal;
+    }
+    .orow .heat i {
+      font-style: normal;
+      font-size: 0.68em;
+      font-weight: 650;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+    .orow.head .heat { color: var(--muted); font-size: 1em; }
+    .list {
+      list-style: none;
+      display: grid;
+      gap: clamp(10px, 1.3vw, 16px);
+      font-size: clamp(15px, 1.5vw, 21px);
+      line-height: 1.55;
+    }
+    .list .lab {
+      color: var(--accent);
+      font-weight: 700;
+      margin-right: 0.35em;
+    }
+    .hl {
+      color: var(--accent);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      font-size: 1.06em;
+    }
+    .src { color: var(--accent); font-weight: 700; }
+    .claim { color: #16364a; font-weight: 700; }
+    .heat.go { color: var(--go); font-weight: 700; }
+    .heat.mid { color: var(--accent); font-weight: 700; }
+    .heat.hold { color: var(--hold); font-weight: 700; }
+    .step { color: var(--accent); font-weight: 700; }
+    .pill {
+      display: inline-block;
+      padding: 0.14em 0.62em;
+      border-radius: 999px;
+      font-size: 0.82em;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .pill.go { background: var(--go-bg); color: var(--go); }
+    .pill.mid { background: var(--accent-soft); color: var(--accent); }
+    .pill.hold { background: var(--hold-bg); color: var(--hold); }
+    .metrics {
+      flex: 0 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(10px, 1.3vw, 16px);
+      margin: 0 0 clamp(12px, 1.5vw, 20px);
+    }
+    .metric {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--accent);
+      padding: clamp(16px, 1.9vw, 22px);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      min-height: clamp(110px, 16vw, 160px);
+    }
+    .metric .v {
+      font-family: "Noto Serif SC", serif;
+      font-size: clamp(22px, 2.35vw, 34px);
+      color: var(--ink);
+      line-height: 1.15;
+    }
+    .metric .l {
+      margin-top: 0.5em;
+      font-size: clamp(13px, 1.15vw, 15px);
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    .rules {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: repeat(5, 1fr);
+    }
+    .rule {
+      display: grid;
+      grid-template-columns: minmax(12em, 42%) 1fr;
+      gap: 1.2em;
+      align-items: center;
+      border-top: 1px solid var(--line);
+      font-size: clamp(14px, 1.35vw, 18px);
+      line-height: 1.45;
+    }
+    .rule:last-child { border-bottom: 1px solid var(--line); }
+    .rule .if { color: var(--muted); }
+    .nav {
+      position: absolute;
+      left: clamp(32px, 5vw, 72px);
+      right: clamp(32px, 5vw, 72px);
+      bottom: clamp(10px, 1.5vw, 16px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: clamp(11px, 1vw, 13px);
+      color: var(--muted);
+      pointer-events: none;
+      z-index: 4;
+    }
+    #pager {
+      font-family: Newsreader, serif;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.12em;
+      color: var(--ink);
+    }
+    .hint { letter-spacing: 0.06em; }
+    .rail {
+      background:
+        linear-gradient(180deg, rgba(42, 93, 120, 0.16) 0%, rgba(255, 248, 238, 0.28) 100%);
+      border-right: 1px solid var(--line);
+      padding: clamp(26px, 3.4vw, 42px) clamp(14px, 1.8vw, 22px) clamp(48px, 6.4vw, 68px);
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .rail-no {
+      font-family: Newsreader, "Noto Serif SC", serif;
+      font-size: clamp(40px, 5.4vw, 76px);
+      font-weight: 650;
+      line-height: 0.85;
+      color: var(--accent);
+      letter-spacing: -0.04em;
+    }
+    .rail-tag { margin-top: 1.05em; align-self: flex-start; }
+    .rail-hook {
+      margin-top: clamp(14px, 1.8vw, 22px);
+      font-size: clamp(13px, 1.15vw, 15px);
+      line-height: 1.5;
+      color: var(--muted);
+    }
+    .rail-heat {
+      margin-top: auto;
+      font-family: Newsreader, "Noto Serif SC", serif;
+      font-size: clamp(26px, 3vw, 42px);
+      font-variant-numeric: tabular-nums;
+      font-weight: 650;
+      line-height: 1;
+    }
+    .rail-heat.go { color: var(--go); }
+    .rail-heat.mid { color: var(--accent); }
+    .rail-heat.hold { color: var(--hold); }
+    .rail-cap {
+      margin-top: 0.4em;
+      font-size: clamp(10px, 0.95vw, 12px);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 650;
+    }
+    .topic-main {
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      padding: clamp(20px, 2.6vw, 32px) clamp(20px, 2.8vw, 40px) clamp(42px, 5.4vw, 60px) clamp(18px, 2.2vw, 28px);
+    }
+    .slide.topic h2 {
+      font-size: clamp(18px, 1.85vw, 26px);
+      margin-bottom: clamp(6px, 0.7vw, 8px);
+      max-width: none;
+    }
+    .topic-domains {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35em 0.45em;
+      margin: 0 0 clamp(10px, 1.15vw, 16px);
+    }
+    .topic-domains span {
+      font-size: clamp(11px, 1.02vw, 13px);
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      font-weight: 650;
+      padding: 0.16em 0.58em;
+      border: 1px solid rgba(42, 93, 120, 0.28);
+      background: var(--accent-soft);
+    }
+    .brief {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      display: grid;
+      gap: clamp(10px, 1.2vw, 16px);
+      padding-right: 8px;
+    }
+    .brief::-webkit-scrollbar { width: 6px; }
+    .brief::-webkit-scrollbar-thumb { background: rgba(42, 93, 120, 0.28); border-radius: 99px; }
+    .card {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--line);
+      border-radius: 0;
+      padding: 0 0 clamp(10px, 1.2vw, 14px);
+    }
+    .card h3 {
+      font-size: clamp(12px, 1.1vw, 14px);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 0.55em;
+    }
+    .slide.topic .card p {
+      font-size: clamp(15px, 1.42vw, 19px);
+      line-height: 1.62;
+    }
+    .slide.topic .card p + p { margin-top: 0.62em; }
+    .trail {
+      list-style: none;
+      margin: 0;
+      padding: 0 0 0 0.15em;
+      border-left: 1.5px solid rgba(42, 93, 120, 0.28);
+      display: grid;
+      gap: 0;
+      font-size: clamp(14px, 1.32vw, 18px);
+      line-height: 1.55;
+    }
+    .trail li {
+      position: relative;
+      padding: 0 0 0.72em 1.15em;
+    }
+    .trail li:last-child { padding-bottom: 0.1em; }
+    .trail li::before {
+      content: "";
+      position: absolute;
+      left: -5px;
+      top: 0.52em;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(42, 93, 120, 0.12);
+    }
+    .keep {
+      font-size: clamp(14px, 1.32vw, 18px);
+      line-height: 1.5;
+      color: var(--ink);
+      background: var(--go-bg);
+      border-left: 4px solid var(--go);
+      padding: 0.65em 0.9em;
+    }
+    .keep .lab {
+      color: var(--go);
+      font-weight: 700;
+      margin-right: 0.35em;
+    }
+    .sources {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4em;
+      margin-top: clamp(8px, 1vw, 12px);
+      padding-top: clamp(8px, 1vw, 12px);
+      border-top: 1px solid var(--line);
+    }
+    .sources a {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.26em 0.75em;
+      border-radius: 999px;
+      background: rgba(255, 252, 247, 0.72);
+      border: 1px solid var(--line);
+      color: var(--accent);
+      font-size: clamp(12px, 1.1vw, 14px);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .sources a:hover { background: var(--accent-soft); }
+    .sources a.pool { color: var(--ink); }
+    .sources a:not(.pool)::after {
+      content: "中";
+      margin-left: 0.35em;
+      font-size: 0.78em;
+      font-weight: 650;
+      letter-spacing: 0.04em;
+      opacity: 0.55;
+    }
+
+    /* —— 手机 / 竖屏：取消 16:9 画布，全屏可滚 —— */
+    @media (max-width: 900px), (max-aspect-ratio: 3/4) {
+      html, body {
+        height: 100%;
+        overflow: hidden;
+        background: var(--warm);
+      }
+      .stage {
+        width: 100vw;
+        height: 100dvh;
+        height: 100vh;
+        max-width: none;
+        margin: 0;
+        box-shadow: none;
+        overflow: hidden;
+      }
+      .slide {
+        padding: 56px 18px 64px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+      }
+      .slide.cover.on {
+        justify-content: flex-start;
+        padding-bottom: 72px;
+        gap: 8px;
+      }
+      .slide:not(.cover):not(.topic) {
+        padding-top: 56px;
+      }
+      .brand {
+        top: 12px;
+        left: 18px;
+        right: 18px;
+        font-size: 10px;
+        letter-spacing: 0.18em;
+      }
+      .brand .en { letter-spacing: 0.22em; }
+      .mast {
+        flex-wrap: wrap;
+        gap: 0.45em 0.7em;
+        font-size: 11px;
+        letter-spacing: 0.16em;
+      }
+      .mast .en { letter-spacing: 0.2em; }
+      .mast .cn { letter-spacing: 0.28em; }
+      .mast .stamp {
+        margin-left: 0;
+        letter-spacing: 0.12em;
+      }
+      h1 {
+        font-size: clamp(28px, 8.2vw, 40px);
+        max-width: none;
+      }
+      h2 {
+        font-size: clamp(20px, 5.8vw, 28px);
+        margin-bottom: 14px;
+      }
+      .kicker { font-size: 12px; margin-bottom: 8px; }
+      .lead {
+        font-size: 15px;
+        max-width: none;
+        margin-top: 12px;
+      }
+      .cover-rule {
+        width: min(48%, 180px);
+        margin: 16px 0 14px;
+      }
+      .cover-agenda {
+        flex-direction: column;
+        gap: 0.55em;
+        font-size: 14px;
+      }
+      .cover-date { margin-top: 20px; font-size: 13px; }
+      .foot {
+        font-size: 12px;
+        padding-top: 0.9em;
+        margin-top: 1.2em;
+      }
+      .toc {
+        grid-template-rows: none;
+        gap: 0;
+      }
+      .toc li {
+        grid-template-columns: 2.4em 1fr;
+        grid-template-rows: auto auto;
+        gap: 0.15em 0.7em;
+        padding: 0.85em 0;
+        font-size: clamp(18px, 5.2vw, 24px);
+      }
+      .toc .n { grid-row: 1 / span 2; align-self: center; }
+      .toc .hint {
+        grid-column: 2;
+        font-size: 12px;
+      }
+      .tiles {
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+        gap: 10px;
+        flex: none;
+      }
+      .tile {
+        padding: 14px 16px;
+      }
+      .tile p { font-size: 15px; }
+      .tile .lab { font-size: 11px; }
+      .bands,
+      .bands.three,
+      .bands.stock {
+        grid-template-rows: none;
+        flex: none;
+      }
+      .band {
+        grid-template-columns: 1fr;
+        gap: 0.35em;
+        align-items: start;
+        padding: 0.85em 0.1em;
+        font-size: 15px;
+      }
+      .bands.stock .band {
+        font-size: 15px;
+        padding-top: 0.85em;
+        padding-bottom: 0.85em;
+      }
+      .band .lab {
+        font-size: 11px;
+        padding-top: 0;
+      }
+      .band .st { justify-self: start; }
+      .criteria {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .heat-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        flex: none;
+      }
+      .heat-chip {
+        padding: 14px 12px;
+        min-height: 0;
+      }
+      .heat-chip .n { font-size: 28px; }
+      .heat-chip .t { font-size: 12px; }
+      .heat-chip .foot-tag { font-size: 13px; margin-top: 0.7em; }
+      .overview,
+      .overview.scan {
+        grid-template-rows: none;
+        flex: none;
+      }
+      .orow {
+        grid-template-columns: 1.8em 1fr;
+        grid-template-areas:
+          "ix title"
+          "ix heat"
+          "ix pill";
+        gap: 0.2em 0.7em;
+        padding: 0.75em 0.1em;
+        font-size: 14px;
+        align-items: start;
+      }
+      .orow.head { display: none; }
+      .orow .ix { grid-area: ix; padding-top: 0.1em; }
+      .orow > :nth-child(2) { grid-area: title; }
+      .orow .heat {
+        grid-area: heat;
+        align-items: flex-start;
+        text-align: left;
+        min-width: 0;
+        flex-direction: row;
+        gap: 0.45em;
+        flex-wrap: wrap;
+      }
+      .orow .pill { grid-area: pill; justify-self: start; margin-top: 0.15em; }
+      .list { font-size: 15px; gap: 12px; }
+      .metrics {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .metric {
+        min-height: 0;
+        padding: 14px 16px;
+      }
+      .metric .v { font-size: 22px; }
+      .metric .l { font-size: 13px; }
+      .rules {
+        grid-template-rows: none;
+        flex: none;
+      }
+      .rule {
+        grid-template-columns: 1fr;
+        gap: 0.35em;
+        padding: 0.85em 0;
+        font-size: 14px;
+        align-items: start;
+      }
+      .slide.topic {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto minmax(0, 1fr);
+      }
+      .slide.topic.on { display: grid; }
+      .rail {
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+        padding: 52px 18px 14px;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-areas:
+          "no tag"
+          "hook hook"
+          "heat cap";
+        gap: 0.35em 0.85em;
+        align-items: center;
+      }
+      .rail-no {
+        grid-area: no;
+        font-size: 42px;
+        line-height: 0.9;
+      }
+      .rail-tag {
+        grid-area: tag;
+        margin-top: 0;
+        justify-self: start;
+      }
+      .rail-hook {
+        grid-area: hook;
+        margin-top: 0.2em;
+        font-size: 13px;
+      }
+      .rail-heat {
+        grid-area: heat;
+        margin-top: 0.35em;
+        font-size: 28px;
+      }
+      .rail-cap {
+        grid-area: cap;
+        margin-top: 0.55em;
+        font-size: 10px;
+        align-self: end;
+      }
+      .topic-main {
+        padding: 14px 18px 56px;
+        overflow: visible;
+      }
+      .slide.topic h2 {
+        font-size: clamp(17px, 4.8vw, 22px);
+      }
+      .topic-domains span { font-size: 11px; }
+      .brief {
+        flex: none;
+        overflow: visible;
+        padding-right: 0;
+        gap: 12px;
+      }
+      .slide.topic .card p { font-size: 15px; }
+      .trail { font-size: 14px; }
+      .keep { font-size: 14px; }
+      .sources a {
+        font-size: 13px;
+        padding: 0.4em 0.85em;
+      }
+      .nav {
+        left: 18px;
+        right: 18px;
+        bottom: 10px;
+        font-size: 11px;
+      }
+      .hint::after { content: none; }
+    }
+
+    @media (max-width: 900px) {
+      .nav .hint { letter-spacing: 0.04em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="brand is-hidden" id="brand"><span><span class="en">Counterpoint</span> · 对位</span><span>未对外发</span></div>
+    <section class="slide cover on" data-kicker="01 / 12">
+      <div class="mast">
+        <span class="en">Counterpoint</span>
+        <span class="cn">对位</span>
+        <span class="stamp">未对外发</span>
+      </div>
+      <div>
+        <h1>首周选题会</h1>
+        <div class="cover-rule"></div>
+        <ul class="cover-agenda">
+          <li><i>01</i>项目进度</li>
+          <li><i>02</i>议题内容</li>
+          <li><i>03</i>定题+运营策略</li>
+        </ul>
+        <p class="cover-date">选题汇报 · 2026 年 9 月</p>
+      </div>
+    </section>
+
+    <section class="slide" data-kicker="02 / 12">
+      <div class="kicker">项目进度</div>
+      <h2>网站已建</h2>
+      <div class="bands">
+        <div class="band"><span class="lab">名字</span><p>Counterpoint · 对位，站已上线</p></div>
+        <div class="band"><span class="lab">选题</span><p>从很专的内部题 → 这周外面正在热议的泛商业话题</p></div>
+        <div class="band"><span class="lab">状态</span><p>这五条还在选题池，暂时没上刊</p></div>
+        <div class="band"><span class="lab">窗口</span><p>上线 <span class="hl">10 月 5 日–12 日</span></p></div>
+      </div>
+    </section>
+
+    <section class="slide" data-kicker="03 / 12">
+      <div class="kicker">项目进度</div>
+      <h2>今天只定题，10 月才上刊</h2>
+      <div class="bands three">
+        <div class="band"><span class="lab">已有</span><p>网站、合规红线、五条候选题目，暂未对外</p></div>
+        <div class="band"><span class="lab">已核实</span><p>大媒报道和 X 热度核过了</p></div>
+        <div class="band"><span class="lab">需定</span><p>先发哪几条；题面改不改</p></div>
+      </div>
+    </section>
+
+    <section class="slide" data-kicker="04 / 12">
+      <div class="kicker">议题筛选标准</div>
+      <h2>这周听过 + 普通人能开口</h2>
+      <div class="criteria">
+        <div class="tile"><div class="lab">大报</div><p>指定媒体独立成稿 ≥ <span class="hl">2</span> 家（路透 / 彭博 / WSJ 等），通稿换皮不算</p></div>
+        <div class="tile"><div class="lab">X 热度</div><p>每题只计<span class="hl">一条主证据帖</span>的转发 + 评论（通常是原声账号），不是把该话题下所有推文加总，点赞、引用不算。9/15 关键词核：≥<span class="hl">500</span> 先发；<span class="hl">50–499</span> 跟发；对不上先备着</p></div>
+      </div>
+      <div class="heat-row">
+        <div class="heat-chip go"><div class="n">14,723</div><div class="unit">主证据帖 · 转+评</div><div class="t">题 1 · Anthropic 原帖</div><div class="foot-tag">先发</div></div>
+        <div class="heat-chip go"><div class="n">25,040</div><div class="unit">主证据帖 · 转+评</div><div class="t">题 2 · Ternus 原帖</div><div class="foot-tag">先发</div></div>
+        <div class="heat-chip go"><div class="n">3,471</div><div class="unit">主证据帖 · 转+评</div><div class="t">题 3 · OpenAI 原帖</div><div class="foot-tag">先发</div></div>
+        <div class="heat-chip go"><div class="n">928</div><div class="unit">主证据帖 · 转+评</div><div class="t">题 4 · 同题最高一条</div><div class="foot-tag">可先发</div></div>
+        <div class="heat-chip mid"><div class="n">5,578</div><div class="unit">主证据帖 · 转+评</div><div class="t">题 5 · OpenAI 原帖</div><div class="foot-tag">跟发</div></div>
+      </div>
+    </section>
+
+    <section class="slide" data-kicker="05 / 12">
+      <div class="kicker">五题一览</div>
+      <h2>建议先发 1、2、3、4；5 跟发</h2>
+      <div class="overview">
+        <div class="orow head"><span></span><span>题面</span><span class="heat">主证据帖 转+评</span><span>建议</span></div>
+        <div class="orow"><span class="ix">01</span><span>对话被拿去喂另一家模型，追赶还是违规？</span><span class="heat"><b>14,723</b><i>Anthropic 原帖</i></span><span class="pill go">先发</span></div>
+        <div class="orow"><span class="ix">02</span><span>折叠 iPhone 近 2000 美元，值不值？</span><span class="heat"><b>25,040</b><i>Ternus 原帖</i></span><span class="pill go">先发</span></div>
+        <div class="orow"><span class="ix">03</span><span>投行初级分析师的活，是不是开始被做成产品卖了？</span><span class="heat"><b>3,471</b><i>OpenAI 原帖</i></span><span class="pill go">先发</span></div>
+        <div class="orow"><span class="ix">04</span><span>加拿大公务机不在美国造就不让卖？</span><span class="heat"><b>928</b><i>同题最高一条</i></span><span class="pill go">可先发</span></div>
+        <div class="orow"><span class="ix">05</span><span>写代码还该不该绑一家模型？</span><span class="heat"><b>5,578</b><i>OpenAI 原帖</i></span><span class="pill mid">跟发，大报一家</span></div>
+      </div>
+    </section>
+
+    <section class="slide topic" data-kicker="06 / 12">
+      <aside class="rail">
+        <div class="rail-no">01</div>
+        <span class="pill go rail-tag">先发</span>
+        <p class="rail-hook">对话被拿去喂另一家模型</p>
+        <div class="rail-heat go">14,723</div>
+        <div class="rail-cap">主证据帖 · 转+评</div>
+      </aside>
+      <div class="topic-main">
+      <div class="kicker">题 1 · 摘要可滚动 · 链接可打开</div>
+      <h2>中国模型厂商把用户请求偷偷转到美国模型去训练，这算赶超还是偷？</h2>
+      <p class="topic-domains"><span>AI 与自动化</span></p>
+      <div class="brief">
+        <div class="card">
+          <h3>报道摘要</h3>
+          <p>9 月 10 日 Anthropic 发布威胁情报报告，覆盖 2025 年 12 月至 2026 年 8 月被它打断的滥用，分成网络攻击、生物误用、常规武器、非法蒸馏等七类。真正把这周题立起来的，是<span class="claim">「非法蒸馏」</span>这一章，不是生物武器或俄乌黑客那两段。</p>
+          <p>报告说：月之暗面没有用 Kimi 处理用户请求，而是把对话<span class="claim">静默转给 Claude</span>，再把 Claude 的回复显示给用户——用户以为自己在用 Kimi。其中 10 天里近 <span class="hl">30 万</span>条进了 Opus，走 <span class="hl">5,380</span> 个假账号（多数看似在新加坡、日本）。月之暗面还保存部分对话、拆出思维链去训练自己的模型。5–7 月归因它的交互超过 <span class="hl">2,300 万</span>次。报告举例：有人把成都监控、国企内部代码和凭证交给「Kimi」，实际进了 Anthropic；Anthropic 不知道用户有没有被告知。</p>
+          <p>DeepSeek 被写成同一手法。阿里是报告里最大的一单：5–7 月超过 <span class="hl">1.51 亿</span>次，高峰一天近 300 万次、3,500 多个假账号，思维链被拿去喂 Qwen。小米也在点名名单里。几家公司当时没回置评；外交部后来说不知情、反对抹黑。这是<span class="heat hold">单方指控</span>加指定报转述，<span class="claim">不是法庭判决</span>。</p>
+        </div>
+        <div class="card">
+          <h3>背景怎么立住</h3>
+          <ol class="trail">
+            <li><span class="step">原声</span> Anthropic 9/10 报告，个案编号 GTG-16002（月之暗面）、GTG-16001（DeepSeek）、GTG-16005（阿里）。数字和手法都从这里来，不是二手概括。</li>
+            <li><span class="step">指定报钉题面</span> 同日<span class="src">彭博</span>把标题写成 Moonshot 偷偷把用户请求转 Claude——公域看见的是「Kimi 用户被喂给对面」，不是整份威胁报告。</li>
+            <li><span class="step">指定报扩范围</span> 同日<span class="src">路透</span>把蒸馏放进更大的安全稿，带上阿里 1.51 亿次和七家中国实验室；独立于彭博，不是通稿换皮。</li>
+            <li><span class="step">辅证</span> <span class="src">CNBC</span> 跟进转述三家并排，并引隐私法 / 自家条款。行业跟进不算第二家指定报。</li>
+            <li><span class="step">核 X</span> 9/15 关键词：Anthropic 自己那条转+评 <span class="hl">14,723</span>，<span class="heat go">热</span>。题面收到「赶超还是偷」。</li>
+          </ol>
+        </div>
+        <p class="keep"><span class="lab">为什么留</span>原声 + 两家指定报同日独立成稿，外行一听就懂「你的对话被拿去喂对面了」。本周最适合<span class="heat go">当头题</span>。</p>
+      </div>
+      <div class="sources">
+        <a href="https://techcrunch.com/2026/09/10/anthropic-details-distillation-campaigns-from-alibaba-moonshot-ai-and-deepseek/" target="_blank" rel="noopener">TechCrunch</a>
+        <a href="https://www.anthropic.com/threat-intelligence-report-september-2026" target="_blank" rel="noopener">Anthropic 原报告</a>
+        <a href="https://www.cnbc.com/2026/09/11/chinese-ai-labs-moonshot-deepseek-alibaba-anthropic.html" target="_blank" rel="noopener">CNBC</a>
+        <a class="pool" href="https://app.notion.com/p/3d84463f65138120ac6dd77e4e3ae6b7" target="_blank" rel="noopener">选题池</a>
+      </div>
+      </div>
+    </section>
+
+    <section class="slide topic" data-kicker="07 / 12">
+      <aside class="rail">
+        <div class="rail-no">02</div>
+        <span class="pill go rail-tag">先发</span>
+        <p class="rail-hook">折叠 iPhone 近 2000 美元</p>
+        <div class="rail-heat go">25,040</div>
+        <div class="rail-cap">主证据帖 · 转+评</div>
+      </aside>
+      <div class="topic-main">
+      <div class="kicker">题 2 · 摘要可滚动 · 链接可打开</div>
+      <h2>折叠 iPhone 卖到 1999 美元，这是还有人会买，还是苹果把手机做成奢侈品了？</h2>
+      <p class="topic-domains"><span>消费与新品牌</span><span>硬科技与半导体</span></p>
+      <div class="brief">
+        <div class="card">
+          <h3>报道摘要</h3>
+          <p>9 月 9 日库比蒂诺发布会，前任 Cook 把台交给新 CEO Ternus。主菜是第一款折叠 iPhone Duo：合上约护照大小，展开对角线 <span class="hl">7.6</span> 英寸横屏，前面另有一块小外屏；钛金属机身、自研铰链。起售 <span class="hl">$1,999</span>，10 月 16 日预订、23 日开卖。芯片是 A20 Pro，基带换成自研 C2，继续甩掉高通调制解调器。Ternus 当场说，现有折叠屏别扭，不适合刷信息和看视频，Duo 要在口袋里做出接近 iPad 的体验。</p>
+          <p>同场不折叠的 iPhone 18 Pro / Pro Max 起售 <span class="hl">$1,199 / $1,299</span>，各涨 $100。<span class="src">路透</span>现场稿把这件事写成苹果加入折叠屏竞赛：三星 2019 年就做了，华为在中国折叠屏约占八成；IDC 的人说苹果明年可能拿走这个利基市场约 <span class="hl">40%</span>，并且「一上场就定了价格和标准」。苹果股票当天收跌 0.3%。<span class="src">彭博</span>按发布会做全家桶（表、AirPods、Watch）；<span class="src">WSJ</span> 把新 CEO、折叠屏和新价格写在同一条里。消费事件的核心争执于是从「苹果又发新品」收成：<span class="claim">两千美元的折叠屏，是还有人会买，还是把手机做成奢侈品</span>。</p>
+        </div>
+        <div class="card">
+          <h3>背景怎么立住</h3>
+          <ol class="trail">
+            <li><span class="step">原声</span> 苹果新闻稿 + Ternus 发布会。价格、尺寸、预订/开卖日、C2 基带都从这里出。</li>
+            <li><span class="step">指定报现场</span> <span class="src">路透</span>库比蒂诺稿独立写「加入折叠屏竞赛」，并引 IDC、华为份额、对三星的威胁——不是通稿复读。</li>
+            <li><span class="step">指定报第二、第三条</span> <span class="src">彭博</span>做产品全家桶；<span class="src">WSJ</span> 写新 CEO + 新价格。三家指定报同日，网页过关没有争议。</li>
+            <li><span class="step">9/15 核 X</span> Ternus 发布会原帖转+评 <span class="hl">25,040</span>，<span class="heat go">热</span>。不用懂芯片也能开口。</li>
+          </ol>
+        </div>
+        <p class="keep"><span class="lab">为什么留</span>这周公域一定听过的消费事件。<span class="heat go">先发</span>。</p>
+      </div>
+      <div class="sources">
+        <a href="https://www.theverge.com/tech/991965/apple-iphone-duo-launch-event-biggest-announcements" target="_blank" rel="noopener">The Verge</a>
+        <a href="https://www.engadget.com/2254027/apple-iphone-duo-announced-specs-price/" target="_blank" rel="noopener">Engadget</a>
+        <a href="https://www.apple.com/newsroom/2026/09/apple-unveils-iphone-duo/" target="_blank" rel="noopener">苹果新闻稿</a>
+        <a class="pool" href="https://app.notion.com/p/3d84463f651381c7bab5de5b92bfa05a" target="_blank" rel="noopener">选题池</a>
+      </div>
+      </div>
+    </section>
+
+    <section class="slide topic" data-kicker="08 / 12">
+      <aside class="rail">
+        <div class="rail-no">03</div>
+        <span class="pill go rail-tag">先发</span>
+        <p class="rail-hook">投行初级分析师的活被做成产品卖了</p>
+        <div class="rail-heat go">3,471</div>
+        <div class="rail-cap">主证据帖 · 转+评</div>
+      </aside>
+      <div class="topic-main">
+      <div class="kicker">题 3 · 摘要可滚动 · 链接可打开</div>
+      <h2>投行初级分析师的活，是不是开始被做成产品卖了？</h2>
+      <p class="topic-domains"><span>AI 与自动化</span><span>未来工作与组织</span></p>
+      <div class="brief">
+        <div class="card">
+          <h3>报道摘要</h3>
+          <p>9 月 10 日 OpenAI 推出 ChatGPT for Financial Services：在 ChatGPT Work 上接内置金融数据，跑最新模型 <span class="hl">GPT-6 Astra</span>。设计伙伴是摩根士丹利和 Evercore，先对准投行和股票研究。内置数据来自 Daloopa、PitchBook、LSEG News、Crunchbase、Quartr，覆盖财报、电话会纪要、基本面和部分私募公司；OpenAI 自己索引托管，并做逐条引用，数字能追到表。已有 FactSet、标普、Preqin、Datasite 订阅的机构，可以把原数据接进来。产品能做跨源研究、建模型、按本所模板出 pitchbook 和客户材料，并沿用企业版的权限、加密和审计日志。</p>
+          <p><span class="src">路透</span>把它写成面向受监管行业的行业版：先从银行家和股票研究员铺开，后面还要训模型去干「资深分析师才会的活」，再扩到更广的金融服务业。<span class="src">彭博</span>标题直接写成投资银行家工具。OpenAI 自己举例：做利润表调整时，能看到调整后 EBITDA 背后剔除了哪些成本，再决定要不要写进估值。摩根士丹利的口径是「让一线做对客户有用的研究」；Evercore 强调判断和标准仍是自己的。</p>
+          <p>公域听见的争执因此不是「又出一个行业 ChatGPT」，而是：<span class="claim">初级分析师做模型、写材料、翻数据的活，是不是开始被打包成产品卖了</span>。一边说这是把数据和研究接到同一张桌上；一边问投行还要不要那么多初级岗。这是产品发布加指定报转述，<span class="heat hold">不是裁员公告</span>。</p>
+        </div>
+        <div class="card">
+          <h3>背景怎么立住</h3>
+          <ol class="trail">
+            <li><span class="step">原声</span> OpenAI 9/10 产品页：GPT-6 Astra、数据商名单、摩根士丹利 / Evercore、引用和本所模板，都从这里出。</li>
+            <li><span class="step">指定报钉题面</span> 同日<span class="src">路透</span>写成面向金融业的 ChatGPT，点出投行、股票研究，以及后面要扩到分析师才会的任务。</li>
+            <li><span class="step">指定报第二</span> 同日<span class="src">彭博</span>独立稿，标题钉在「投行工具」。两家指定报，网页过关。</li>
+            <li><span class="step">辅证</span> <span class="src">CNBC</span> 跟进写成对准初级银行家的活。行业跟进不算第二家指定报。</li>
+            <li><span class="step">9/15 核 X</span> OpenAI 自己那条转+评 <span class="hl">3,471</span>，<span class="heat go">热</span>。题面收到「初级的活是不是被做成产品了」。</li>
+          </ol>
+        </div>
+        <p class="keep"><span class="lab">为什么留</span>原声 + 两家指定报同日独立成稿，外行一听就懂「初级的活被打包卖了」。按原尺子<span class="heat go">先发</span>。</p>
+      </div>
+      <div class="sources">
+        <a href="https://www.reuters.com/business/openai-launches-chatgpt-financial-services-industry-2026-09-10/" target="_blank" rel="noopener">路透</a>
+        <a href="https://www.cnbc.com/2026/09/10/openai-chatgpt-for-financial-services-targets-work-of-junior-bankers.html" target="_blank" rel="noopener">CNBC</a>
+        <a href="https://openai.com/index/introducing-chatgpt-financial-services/" target="_blank" rel="noopener">OpenAI 原声</a>
+        <a class="pool" href="https://app.notion.com/p/3d84463f651381288b3dca7e8cc2ee22" target="_blank" rel="noopener">选题池</a>
+      </div>
+      </div>
+    </section>
+
+    <section class="slide topic" data-kicker="09 / 12">
+      <aside class="rail">
+        <div class="rail-no">04</div>
+        <span class="pill go rail-tag">可先发</span>
+        <p class="rail-hook">加拿大公务机不在美国造就不让卖</p>
+        <div class="rail-heat go">928</div>
+        <div class="rail-cap">主证据帖 · 转+评</div>
+      </aside>
+      <div class="topic-main">
+      <div class="kicker">题 4 · 摘要可滚动 · 链接可打开</div>
+      <h2>加拿大公务机不在美国造就不让卖，供应链这是被点名了，还是还在放话？</h2>
+      <p class="topic-domains"><span>供应链与关税</span><span>汽车与出行</span></p>
+      <div class="brief">
+        <div class="card">
+          <h3>报道摘要</h3>
+          <p>9 月 7 日特朗普在 Truth Social 发帖：<span class="hl">「NO MORE SELLING BOMBARDIER IN THE UNITED STATES」</span>，说产品不够好；要美国市场就得在美国造，别再把美国当存钱罐。第二天加拿大对美反制关税就要落地，这是同一场贸易战里点名一家飞机制造商。<span class="src">路透</span>、<span class="src">彭博</span>同日独立成稿。白宫当时没说怎么执行、怎么拦住已经 FAA 认证、也符合美墨加协定的交付。</p>
+          <p>Bombardier 客户运营约 <span class="hl">5,100</span> 架飞机，大约一半在美国。公司在美国有约 <span class="hl">3,500</span> 人、<span class="hl">2,800</span> 家供应商，每年向美国供应商采购超过 <span class="hl">$25 亿</span>；堪萨斯有国防改装厂，得州给旗舰 Global 8000 造机翼，正在开第六个美国服务中心。公务机发动机多来自 Honeywell 和 GE。公司当晚声明：计划继续在美国投人、投客户、投社区。航空分析师 Aboulafia 认为客户不会因此取消订单，也看不出特朗普怎么真正拦住销售——航空航天目前大体还没被关税打到，美国该行业 2025 年还录得约 $1,092 亿贸易顺差。</p>
+          <p>这不是第一次点名。今年 1 月美方说过要取消 Global Express 认证、对加拿大造飞机加 50% 关税，直到加方认证湾流的飞机；两件事当时都没落地，2 月加拿大反而认证了 G700 / G800。一边是<span class="claim">不在美国造就不让卖</span>；一边是<span class="claim">供应链已经绑在美国，上次放话也没执行</span>。题面收到：这是被点名了，还是还在放话。</p>
+        </div>
+        <div class="card">
+          <h3>背景怎么立住</h3>
+          <ol class="trail">
+            <li><span class="step">原声</span> 特朗普 9/7 帖 + 公司「美国已有人、已有供应商、$25 亿采购」的声明。</li>
+            <li><span class="step">指定报一</span> 同日<span class="src">路透</span>多伦多/蒙特利尔稿：禁售口径、机队一半在美、堪萨斯厂、1 月那轮没落地。</li>
+            <li><span class="step">指定报二</span> 同日<span class="src">彭博</span>独立写同一句话。两家指定报，网页过关。</li>
+            <li><span class="step">9/15 核 X</span> 同题最高一条转+评 <span class="hl">928</span>。按 ≥500 可先发；要卡 1000 就降成跟发。</li>
+          </ol>
+        </div>
+        <p class="keep"><span class="lab">为什么留</span>比加税总账更好开口：点名一家公司、美国人听得懂。按原尺子<span class="heat go">可先发</span>。</p>
+      </div>
+      <div class="sources">
+        <a href="https://www.reuters.com/business/aerospace-defense/trump-says-canadas-bombardier-cannot-sell-us-unless-it-builds-there-2026-09-07/" target="_blank" rel="noopener">路透</a>
+        <a href="https://www.bloomberg.com/news/articles/2026-09-07/trump-threatens-to-bar-sale-of-canadian-bombardier-jets-in-us" target="_blank" rel="noopener">彭博</a>
+        <a class="pool" href="https://app.notion.com/p/3dc4463f651381f19e28ddebee47d745" target="_blank" rel="noopener">选题池</a>
+      </div>
+      </div>
+    </section>
+
+    <section class="slide topic" data-kicker="10 / 12">
+      <aside class="rail">
+        <div class="rail-no">05</div>
+        <span class="pill mid rail-tag">跟发</span>
+        <p class="rail-hook">写代码还该不该绑一家模型</p>
+        <div class="rail-heat mid">5,578</div>
+        <div class="rail-cap">主证据帖 · 转+评</div>
+      </aside>
+      <div class="topic-main">
+      <div class="kicker">题 5 · 摘要可滚动 · 链接可打开</div>
+      <h2>OpenAI 不给马斯克刚买的编程工具供模型了，写代码还该不该绑一家？</h2>
+      <p class="topic-domains"><span>AI 与自动化</span><span>未来工作与组织</span></p>
+      <div class="brief">
+        <div class="card">
+          <h3>报道摘要</h3>
+          <p>8 月 28 日 OpenAI 通知 SpaceX：要结束向 Cursor 供自家模型的合同，提议切断日是 <span class="hl">11 月 12 日</span>——合同允许的最长通知。Cursor 母公司 Anysphere 6 月被 SpaceX 以约 <span class="hl">$600 亿</span>全股票买下，本月交割完成。OpenAI 说跟 Cursor 做了近四年，尊重产品和团队，但控制权一变，合同给了一小段可以解约的窗口；接下来的 Astra 模型也不打算再供给 Cursor。</p>
+          <p>公开理由是：没法确信 SpaceX 会按服务条款用这些技术，「马斯克旗下公司有过违约」。马斯克收购 Twitter（现已并进 SpaceX）之后，对方破过合同；今年庭上马斯克承认 xAI（现也在 SpaceX 旗下）违反过 OpenAI 条款。这是 Altman 和马斯克多年对打的又一刀：马斯克告 OpenAI 约 <span class="hl">$1500 亿</span>，陪审团此前以起诉过晚驳回。<span class="src">路透</span>写成合伙结束、旧怨升级。马斯克在 X 上回「I couldn't care less」，并再骂 Altman、Brockman 不可信。Cursor 联合创始人、现 SpaceX 高管 Michael Truell 说还在跟 OpenAI 谈。数小时后 Anthropic 联合创始人 Tom Brown 说，会加计算力，把 Claude 在 Cursor 里撑住。</p>
+          <p>写代码的人这周听见的是：编辑器还在，模型可能突然被掐。一边是<span class="claim">换东家就要准备被断供</span>；一边是 Anthropic 立刻补位。题面收到：<span class="claim">写代码还该不该把模型和工具绑在同一家</span>。</p>
+        </div>
+        <div class="card">
+          <h3>背景怎么立住</h3>
+          <ol class="trail">
+            <li><span class="step">原声</span> OpenAI 8/28 说明：控制权变更解约、11/12 切断、不给后续 Astra、违约指控都从这里出。</li>
+            <li><span class="step">指定报一</span> <span class="src">路透</span>独立写「结束与被 SpaceX 收购的 Cursor 的合作」，并记下马斯克回帖、Truell 还在谈、Anthropic 加力。</li>
+            <li><span class="step">不够第二家</span> CNBC / InfoWorld 是跟进，不能凑指定报。<span class="src">Bloomberg Law</span> 是法律线，按新闻主站不算第二家彭博。</li>
+            <li><span class="step">9/15 核 X</span> OpenAI 原帖转+评 <span class="hl">5,578</span>，<span class="heat go">热</span>。网页关没过两家，故<span class="heat mid">跟发</span>。</li>
+          </ol>
+        </div>
+        <p class="keep"><span class="lab">为什么留</span>公域听过、外行接得上「模型被掐了」。X 够，大报不够两家，所以<span class="heat mid">跟发</span>。</p>
+      </div>
+      <div class="sources">
+        <a href="https://www.cnbc.com/2026/08/29/openai-cursor-spacex-model-access.html" target="_blank" rel="noopener">CNBC</a>
+        <a href="https://openai.com/index/our-decision-on-cursor-following-its-acquisition-by-spacex/" target="_blank" rel="noopener">OpenAI 原声</a>
+        <a href="https://www.infoworld.com/article/4216503/cursor-customers-will-lose-access-to-openai-coding-models-in-november.html" target="_blank" rel="noopener">InfoWorld</a>
+        <a class="pool" href="https://app.notion.com/p/3d84463f65138146a772dbe61c2733e4" target="_blank" rel="noopener">选题池</a>
+      </div>
+      </div>
+    </section>
+
+    <section class="slide" data-kicker="11 / 12">
+      <div class="kicker">选题库存</div>
+      <h2>选题池已建，上线前只攒题</h2>
+      <div class="bands stock">
+        <div class="band"><span class="lab">建了什么</span><p>Notion 选题池收候选；站点读 Issues，上刊才搬；候选不上首页</p></div>
+        <div class="band"><span class="lab">按什么建</span><p>从 RWA 内部题切到泛商业；尺子：两大报已报道 + X 转评超过 <span class="hl">1000</span></p></div>
+        <div class="band"><span class="lab">怎么扫</span><p>先扫指定大报，再核 X 转评；最多交 <span class="hl">8</span> 条，我审核通过才入库</p></div>
+        <div class="band"><span class="lab">上线前</span><p>上线前不对外发宣传，候选不上首页</p></div>
+      </div>
+      <p class="topic-domains stock-domains">
+        <span>AI 与自动化</span>
+        <span>硬科技 / 消费电子</span>
+        <span>供应链与关税</span>
+        <span>未来工作与组织</span>
+        <span>新能源与电力</span>
+      </p>
+    </section>
+
+    <section class="slide" data-kicker="12 / 12">
+      <div class="kicker">网站运营策略</div>
+      <h2>判断网站热闹指标</h2>
+      <p class="lead" style="margin: 0 0 clamp(10px, 1.2vw, 16px); max-width: none;">每周只记 3 个数（后台看人数，不导出名单）</p>
+      <div class="metrics">
+        <div class="metric">
+          <div class="v">订阅净增</div>
+          <div class="l">本周 Buttondown 总人数 − 上周总人数</div>
+        </div>
+        <div class="metric">
+          <div class="v">Telegram 净增</div>
+          <div class="l">本周群人数 − 上周群人数</div>
+        </div>
+        <div class="metric">
+          <div class="v">真人说话题数</div>
+          <div class="l">有非运营号发言的题数（垫场不算）</div>
+        </div>
+      </div>
+      <ul class="list bands three">
+        <li class="band"><span class="lab">头四周</span><p>只记这 3 个数，不设必须涨到多少</p></li>
+        <li class="band"><span class="lab">第 5 周起</span><p>拿前 4 周中位数当基准；连续 <span class="hl">2</span> 周低于它，才算不热闹</p></li>
+        <li class="band"><span class="lab">每周三问</span><p>发出去了吗（上刊 <span class="hl">2–3</span> 条）／有人说话吗（真人说话题数 ≥<span class="hl">1</span>）／订阅和 Telegram 动了吗（两个净增是否 &gt;0）</p></li>
+      </ul>
+    </section>
+
+    <div class="nav">
+      <span class="hint" id="navHint">← → 翻页</span>
+      <span id="pager">01 / 12</span>
+    </div>
+  </div>
+  <script>
+    const slides = [...document.querySelectorAll(".slide")];
+    const pager = document.getElementById("pager");
+    const brand = document.getElementById("brand");
+    const navHint = document.getElementById("navHint");
+    const stage = document.getElementById("stage");
+    let i = 0;
+    function isMobileLayout() {
+      return window.matchMedia("(max-width: 900px), (max-aspect-ratio: 3/4)").matches;
+    }
+    function syncHint() {
+      navHint.textContent = isMobileLayout() ? "左右滑 / 点两侧翻页" : "← → 翻页";
+    }
+    function show(n) {
+      i = (n + slides.length) % slides.length;
+      slides.forEach((s, idx) => s.classList.toggle("on", idx === i));
+      pager.textContent = slides[i].dataset.kicker;
+      brand.classList.toggle("is-hidden", slides[i].classList.contains("cover") || slides[i].classList.contains("topic"));
+      const active = slides[i];
+      if (active) active.scrollTop = 0;
+      const params = new URLSearchParams(location.search);
+      params.set("p", String(i + 1));
+      history.replaceState(null, "", "?" + params.toString());
+    }
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") { e.preventDefault(); show(i + 1); }
+      if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); show(i - 1); }
+      if (e.key === "Home") show(0);
+      if (e.key === "End") show(slides.length - 1);
+    });
+    stage.addEventListener("click", (e) => {
+      if (e.target.closest("a, .brief, .sources, button, input")) return;
+      const r = stage.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;
+      if (x > 0.62) show(i + 1);
+      else if (x < 0.38) show(i - 1);
+    });
+    let touchX = 0, touchY = 0, touching = false;
+    stage.addEventListener("touchstart", (e) => {
+      if (!e.touches[0] || e.target.closest("a, .sources")) return;
+      touching = true;
+      touchX = e.touches[0].clientX;
+      touchY = e.touches[0].clientY;
+    }, { passive: true });
+    stage.addEventListener("touchend", (e) => {
+      if (!touching || !e.changedTouches[0]) return;
+      touching = false;
+      const dx = e.changedTouches[0].clientX - touchX;
+      const dy = e.changedTouches[0].clientY - touchY;
+      if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy) * 1.2) return;
+      if (dx < 0) show(i + 1);
+      else show(i - 1);
+    }, { passive: true });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "f" || e.key === "F") {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+        else document.exitFullscreen();
+      }
+    });
+    const inWeChat = /MicroMessenger/i.test(navigator.userAgent);
+    document.querySelectorAll(".sources a:not(.pool)").forEach((a) => {
+      const orig = a.getAttribute("href");
+      a.dataset.src = orig;
+      // 微信内置浏览器常打不开 Google 翻译；默认走原文 HTTPS。
+      // 非微信环境可长按/用 title 提示：需要机翻时自行打开翻译页。
+      if (inWeChat) {
+        a.title = "打开原文（微信内可能需「用浏览器打开」）";
+      } else {
+        a.title = "打开原文；若要机翻可复制链接到翻译工具";
+      }
+    });
+    syncHint();
+    window.addEventListener("resize", syncHint);
+    show(Math.max(0, (Number(new URLSearchParams(location.search).get("p")) || 1) - 1));
+  </script>
+</body>
+</html>
